@@ -206,7 +206,6 @@ $(function() {
     // // Calculate color
     // var index = Math.abs(hash % COLORS.length);
     return usercolor;
-    // return data.usercolor;
   }
 
   // Keyboard events
