@@ -18,16 +18,19 @@ io.on('connection', function (socket) {
   var addedUser = false;
 
   // when the client emits 'new message', this listens and executes
-  socket.on('new message', function (data) {
+  socket.on('new message', function (data, usercolor) {
     // we tell the client to execute 'new message'
     socket.broadcast.emit('new message', {
       username: socket.username,
-      message: data
+      message: data,
+      usercolor: usercolor
     });
+    console.log(usercolor)
   });
 
   // when the client emits 'add user', this listens and executes
-  socket.on('add user', function (username) {
+  socket.on('add user', function (username, usercolor) {
+    // console.log(usercolor);
     if (addedUser) return;
 
     // we store the username in the socket session for this client
