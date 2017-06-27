@@ -49,7 +49,7 @@ $(function() {
   }
   
   // Sets the client's username
-  function setUsername () {
+  function registerUser () {
     username = cleanInput($usernameInput.val().trim());
     usercolor = cleanInput($usercolorInput.val().trim());
     console.log('hello');
@@ -63,7 +63,7 @@ $(function() {
       $currentInput = $inputMessage.focus();
 
       // Tell the server your username
-      socket.emit('add user', username);
+      socket.emit('add user', username, usercolor);
     }
   }
   
@@ -78,10 +78,11 @@ $(function() {
       $inputMessage.val('');
       addChatMessage({
         username: username,
-        message: message
+        message: message,
+        usercolor: usercolor
       });
       // tell server to execute 'new message' and send along one parameter
-      socket.emit('new message', message);
+      socket.emit('new message', message, usercolor);
     }
   }
 
@@ -103,7 +104,9 @@ $(function() {
 
     var $usernameDiv = $('<span class="username"/>')
       .text(data.username)
-      .css('color', getUsernameColor(data.username));
+      // .css('color', getUsernameColor(data.username));
+      .css('color', data.usercolor);
+    console.log(data.usercolor)
     var $messageBodyDiv = $('<span class="messageBody">')
       .text(data.message);
 
@@ -203,6 +206,7 @@ $(function() {
     // // Calculate color
     // var index = Math.abs(hash % COLORS.length);
     return usercolor;
+    // return data.usercolor;
   }
 
   // Keyboard events
@@ -215,12 +219,12 @@ $(function() {
     }
     // When the client hits ENTER on their keyboard
     if (event.which === 13) {
-      if (username) {
+      if (username && usercolor) {
         sendMessage();
         socket.emit('stop typing');
         typing = false;
       } else {
-        setUsername();
+        registerUser();
       }
     }
   });
